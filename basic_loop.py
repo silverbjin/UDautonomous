@@ -146,29 +146,29 @@ while True:
         configs.conf_thresh = 0.5
 
         # Example C2-3-1 : Crop point cloud
-        # lidar_pcl = l1_examples.range_image_to_point_cloud(frame, lidar_name, True)
-        # cropped_pcl = l2_examples.crop_pcl(lidar_pcl, configs, False)
+        lidar_pcl = l1_examples.range_image_to_point_cloud(frame, lidar_name, True)
+        cropped_pcl = l2_examples.crop_pcl(lidar_pcl, configs, False)
 
         # Exercise C2-3-2 : Transform metric point coordinates to BEV space
-        # l2_exercises.pcl_to_bev(cropped_pcl, configs)
+        l2_exercises.pcl_to_bev(cropped_pcl, configs)
 
         # Example C2-3-3 : Minimum and maximum intensity
-        # l2_examples.min_max_intensity(lidar_pcl)
+        l2_examples.min_max_intensity(lidar_pcl)
 
         # Example C2-4-2 : count total no. of vehicles and vehicles that are difficult to track
-        # l2_examples.count_vehicles(frame)
+        l2_examples.count_vehicles(frame)
 
         # Example C2-4-3 : Display label bounding boxes on top of BEV map
-        #lidar_bev = load_object_from_file(results_fullpath, data_filename, 'lidar_bev', cnt_frame)
-        #lidar_bev_labels = l2_examples.render_bb_over_bev(lidar_bev, frame.laser_labels, configs)
+        lidar_bev = load_object_from_file(results_fullpath, data_filename, 'lidar_bev', cnt_frame)
+        lidar_bev_labels = l2_examples.render_bb_over_bev(lidar_bev, frame.laser_labels, configs)
 
         # Example C2-4-4 : Display detected objects on top of BEV map
-        #detections = load_object_from_file(results_fullpath, data_filename, 'detections', cnt_frame)
-        #l2_examples.render_obj_over_bev(detections, lidar_bev_labels, configs, True)
+        detections = load_object_from_file(results_fullpath, data_filename, 'detections', cnt_frame)
+        l2_examples.render_obj_over_bev(detections, lidar_bev_labels, configs, True)
 
         # Exercise C2-4-5 : Compute precision and recall (part 1/2 - remove comments only, no action inside functions required)
-        #det_performance = load_object_from_file(results_fullpath, data_filename, 'det_performance_' + str(conf_thresh), cnt_frame)
-        #det_performance_all.append(det_performance)  # store all evaluation results in a list for performance assessme
+        det_performance = load_object_from_file(results_fullpath, data_filename, 'det_performance_' + str(conf_thresh), cnt_frame)
+        det_performance_all.append(det_performance)  # store all evaluation results in a list for performance assessme
 
         #######
         ####### LESSON 2 EXERCISES & EXAMPLES  END #######
