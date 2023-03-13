@@ -63,18 +63,24 @@ def create_tf_example(filename, encoded_jpeg, annotations):
     return tf_example
 
 
-def process_tfr(path = '/home/jin/Documents/UDautonomous/frames'):
-    # /home/jin/Documents/waymo-od/tutorial/frames
+def process_tfr(path = '/home/workspace/data/train/segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord'):    
     # /home/jin/Documents/UDautonomous/training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord
     # /home/jin/Documents/UDautonomous/frame_with_keypoints.tfrecord
+    # /home/workspace/data/train/segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord
     """
     process a waymo tf record into a tf api tf record
     """
-    # create processed data dir
+    # create processed data dir    
+    # path = '/home/workspace/data/train/segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord'
+    # file_name = os.path.basename(path)
+    # path = '/home/jin/Documents/UDautonomous/frames'
+    # file_name = os.path.basename(path) + '.tfrecord'
+    path = '/home/jin/Documents/UDautonomous/frames.tfrecord'
     file_name = os.path.basename(path)
 
     logging.info(f'Processing {path}')
-    writer = tf.python_io.TFRecordWriter(f'output/{file_name}')
+    # writer = tf.python_io.TFRecordWriter(f'output/{file_name}')    # ok: UDautonomous/output/
+    writer = tf.python_io.TFRecordWriter(f'/home/jin/Documents/UDautonomous/output/{file_name}')
     dataset = tf.data.TFRecordDataset(path, compression_type='')
     for idx, data in enumerate(dataset):
         frame = open_dataset.Frame()
@@ -88,7 +94,8 @@ def process_tfr(path = '/home/jin/Documents/UDautonomous/frames'):
 
 if __name__ == "__main__": 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', required=True, type=str,
+    # parser.add_argument('-p', '--path', required=True, type=str,
+    parser.add_argument('-p', '--path', required=False, type=str,
                         help='Waymo Open dataset tf record')
     args = parser.parse_args()  
     process_tfr(args.path)
