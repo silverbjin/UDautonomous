@@ -21,11 +21,52 @@ def create_tf_example(filename, encoded_jpeg, annotations):
     returns:
     - tf_example [tf.Example]
     """
-    # TO BE IMPLEMENTED  
+    # TO BE IMPLEMENTED revised 230310 
+    encoded_jpg_io = io.BytesIO(encoded_jpeg)
+    image = Image.open(encoded_jpg_io)
+    width, height = image.size
+    
+    mapping = {1: 'vehicle', 2: 'pedestrian', 4: 'cyclist'}
+    image_format = b'jpg'
+    xmins = []
+    xmaxs = []
+    ymins = []
+    ymaxs = []
+    classes_text = []
+    classes = []
+    filename = filename.encode('utf8')
+    
+    for ann in annotations:
+        xmin, ymin = ann.box.center_x - 0.5 * ann.box.length, ann.box.center_y - 0.5 * ann.box.width
+        xmax, ymax = ann.box.center_x + 0.5 * ann.box.length, ann.box.center_y + 0.5 * ann.box.width
+        xmins.append(xmin / width)
+        xmaxs.append(xmax / width)
+        ymins.append(ymin / height)
+        ymaxs.append(ymax / height)    
+        classes.append(ann.type)
+        classes_text.append(mapping[ann.type].encode('utf8'))
+
+    tf_example = tf.train.Example(features=tf.train.Features(feature={
+        'image/height': int64_feature(height),
+        'image/width': int64_feature(width),
+        'image/filename': bytes_feature(filename),
+        'image/source_id': bytes_feature(filename),
+        'image/encoded': bytes_feature(encoded_jpeg),
+        'image/format': bytes_feature(image_format),
+        'image/object/bbox/xmin': float_list_feature(xmins),
+        'image/object/bbox/xmax': float_list_feature(xmaxs),
+        'image/object/bbox/ymin': float_list_feature(ymins),
+        'image/object/bbox/ymax': float_list_feature(ymaxs),
+        'image/object/class/text': bytes_list_feature(classes_text),
+        'image/object/class/label': int64_list_feature(classes),
+    }))
     return tf_example
 
 
-def process_tfr(path):
+def process_tfr(path = '/home/jin/Documents/UDautonomous/frames'):
+    # /home/jin/Documents/waymo-od/tutorial/frames
+    # /home/jin/Documents/UDautonomous/training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord
+    # /home/jin/Documents/UDautonomous/frame_with_keypoints.tfrecord
     """
     process a waymo tf record into a tf api tf record
     """
